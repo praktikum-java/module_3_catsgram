@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/catsgram
+    username: dbuser
+    password: 12345
+    driver-class-name: org.postgresql.Driver
+
+catsgram:
+  image-directory: "images"
