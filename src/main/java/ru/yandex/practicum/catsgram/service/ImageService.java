@@ -6,22 +6,24 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import ru.yandex.practicum.catsgram.dao.ImageRepository;
-import ru.yandex.practicum.catsgram.dao.PostRepository;
+import ru.yandex.practicum.catsgram.dal.ImageRepository;
+import ru.yandex.practicum.catsgram.dal.PostRepository;
 import ru.yandex.practicum.catsgram.dto.ImageDto;
 import ru.yandex.practicum.catsgram.dto.ImageUploadResponse;
 import ru.yandex.practicum.catsgram.exception.ConditionsNotMetException;
 import ru.yandex.practicum.catsgram.exception.ImageFileException;
+import ru.yandex.practicum.catsgram.exception.NotFoundException;
 import ru.yandex.practicum.catsgram.mapper.ImageMapper;
 import ru.yandex.practicum.catsgram.model.Image;
+import ru.yandex.practicum.catsgram.model.ImageData;
 import ru.yandex.practicum.catsgram.model.Post;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -57,15 +59,32 @@ public class ImageService {
                     byte[] bytes = loadFile(image);
                     return ImageMapper.mapToImageDto(image, bytes);
                 }).collect(Collectors.toList());
+    }
 
+    // Загружаем данные указанного изображения с диска
+    public ImageData getImageData(long imageId) {
+        Image image = imageRepository.findById(imageId)
+                .orElseThrow(() -> new NotFoundException("Изображение с id = " + imageId + " не найдено"));
+
+        // Загрузка файла с диска
+        byte[] data = loadFile(image);
+
+        return new ImageData(data, image.getOriginalFileName());
     }
 
     private Path saveFile(MultipartFile file, Post post) {
         try {
-            String uniqueFileName = String.format("%d_%d_%s.%s", post.getAuthor().getId(), post.getId(),
-                    UUID.randomUUID(), StringUtils.getFilenameExtension(file.getOriginalFilename()));
+            // Формирование уникального имени файла на основе текущего времени и расширения оригинального файла
+            String uniqueFileName = String.format("%d.%s", Instant.now().toEpochMilli(),
+                    StringUtils.getFilenameExtension(file.getOriginalFilename()));
 
-            Path uploadPath = Path.of(imageDirectory);
+            // Формирование пути для сохранения файла с учетом идентификаторов автора и поста
+            Path uploadPath = Paths.get(
+                    imageDirectory,
+                    String.valueOf(post.getAuthor().getId()),
+                    String.valueOf(post.getId())
+            );
+
             Path filePath = uploadPath.resolve(uniqueFileName);
 
             // Создаём директории, если они еще не созданы

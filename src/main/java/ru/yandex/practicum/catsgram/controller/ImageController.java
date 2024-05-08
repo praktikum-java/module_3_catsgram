@@ -1,11 +1,12 @@
 package ru.yandex.practicum.catsgram.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.yandex.practicum.catsgram.dto.ImageDto;
 import ru.yandex.practicum.catsgram.dto.ImageUploadResponse;
+import ru.yandex.practicum.catsgram.model.ImageData;
 import ru.yandex.practicum.catsgram.service.ImageService;
 
 import java.util.List;
@@ -27,5 +28,18 @@ public class ImageController {
     @ResponseStatus(HttpStatus.OK)
     public List<ImageDto> getPostImages(@PathVariable("postId") long postId) {
         return imageService.getImages(postId);
+    }
+
+    @GetMapping(value = "/images/{imageId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public ResponseEntity<byte[]> downloadImage(@PathVariable long imageId) {
+        ImageData imageData = imageService.getImageData(imageId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentDisposition(
+                ContentDisposition.attachment()
+                        .filename(imageData.getName())
+                        .build()
+        );
+
+        return new ResponseEntity<>(imageData.getData(), headers, HttpStatus.OK);
     }
 }

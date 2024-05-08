@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.catsgram.dto.NewPostRequest;
 import ru.yandex.practicum.catsgram.dto.PostDto;
+import ru.yandex.practicum.catsgram.dto.UpdatePostRequest;
 import ru.yandex.practicum.catsgram.service.PostService;
 
 @RestController
@@ -23,5 +24,10 @@ public class PostController {
     @ResponseStatus(HttpStatus.OK)
     public PostDto getPostById(@PathVariable("postId") long postId) {
         return postService.getPostById(postId);
+    }
+
+    @PutMapping("/{postId}")
+    public PostDto updatePost(@PathVariable("postId") long postId, @RequestBody UpdatePostRequest post) {
+        return postService.updatePost(postId, post);
     }
 }
