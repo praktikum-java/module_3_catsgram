@@ -4,12 +4,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.time.Instant;
+import java.util.List;
 
 @Data
 @EqualsAndHashCode(of = "id")
 public class Post {
-    private Long id;
-    private long authorId;
+    private long id;
+    private User author;
     private String description;
     private Instant postDate;
+    private List<Image> images;
 }
