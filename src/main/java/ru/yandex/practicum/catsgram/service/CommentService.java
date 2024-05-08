@@ -1,7 +1,7 @@
 package ru.yandex.practicum.catsgram.service;
 
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.catsgram.dao.CommentRepository;
+import ru.yandex.practicum.catsgram.dal.CommentRepository;
 import ru.yandex.practicum.catsgram.model.Comment;
 
 @Service

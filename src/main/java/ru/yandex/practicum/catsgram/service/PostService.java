@@ -2,16 +2,19 @@ package ru.yandex.practicum.catsgram.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.catsgram.dao.PostRepository;
-import ru.yandex.practicum.catsgram.dao.UserRepository;
+import ru.yandex.practicum.catsgram.dal.PostRepository;
+import ru.yandex.practicum.catsgram.dal.UserRepository;
 import ru.yandex.practicum.catsgram.dto.NewPostRequest;
 import ru.yandex.practicum.catsgram.dto.NewPostResponse;
 import ru.yandex.practicum.catsgram.dto.PostDto;
+import ru.yandex.practicum.catsgram.dto.UpdatePostRequest;
 import ru.yandex.practicum.catsgram.exception.ConditionsNotMetException;
 import ru.yandex.practicum.catsgram.exception.NotFoundException;
 import ru.yandex.practicum.catsgram.mapper.PostMapper;
 import ru.yandex.practicum.catsgram.model.Post;
 import ru.yandex.practicum.catsgram.model.User;
+
+import java.time.Instant;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +41,22 @@ public class PostService {
                 .orElseThrow(() -> new RuntimeException("Автор поста не найден"));
 
         post.setAuthor(author);
+
+        return PostMapper.mapToPostDto(post);
+    }
+
+    public PostDto updatePost(long postId, UpdatePostRequest request) {
+        if (request.getDescription() == null || request.getDescription().isBlank()) {
+            throw new ConditionsNotMetException("Текст публикации не может быть пустым");
+        }
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException("Пост с идентификатором " + postId + " не найден."));
+
+        post.setDescription(request.getDescription());
+        post.setPostDate(Instant.now());
+
+        postRepository.update(post);
 
         return PostMapper.mapToPostDto(post);
     }

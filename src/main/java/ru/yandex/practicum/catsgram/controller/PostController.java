@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.catsgram.dto.NewPostRequest;
 import ru.yandex.practicum.catsgram.dto.NewPostResponse;
 import ru.yandex.practicum.catsgram.dto.PostDto;
-import ru.yandex.practicum.catsgram.model.Post;
+import ru.yandex.practicum.catsgram.dto.UpdatePostRequest;
 import ru.yandex.practicum.catsgram.service.PostService;
 
 @RestController
@@ -27,9 +27,8 @@ public class PostController {
         return postService.getPostById(postId);
     }
 
-    @PostMapping("/{postId}/likes")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Post addPostLike(@PathVariable("postId") long postId) {
-        return null;
+    @PutMapping("/{postId}")
+    public PostDto updatePost(@PathVariable("postId") long postId, @RequestBody UpdatePostRequest post) {
+        return postService.updatePost(postId, post);
     }
 }

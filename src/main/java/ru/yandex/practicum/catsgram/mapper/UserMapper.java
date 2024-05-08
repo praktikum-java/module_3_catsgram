@@ -39,7 +39,6 @@ public class UserMapper {
         dto.setUsername(user.getUsername());
         dto.setEmail(user.getEmail());
         dto.setRegistrationDate(Instant.now());
-        dto.setProfile(user.getProfile());
         return dto;
     }
 

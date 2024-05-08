@@ -13,5 +13,4 @@ public class PostDto {
     private Instant postDate;
     private List<String> photos;
     private List<CommentDto> comments;
-    private List<LikeDto> likes;
 }

@@ -34,9 +34,7 @@ services:
             username VARCHAR(40) NOT NULL,
             email VARCHAR(255) NOT NULL,
             password VARCHAR(40) NOT NULL,
-            registration_date TIMESTAMP WITH TIME ZONE NOT NULL,
-            profile_photo_url VARCHAR(2000),
-            profile_description TEXT
+            registration_date TIMESTAMP WITH TIME ZONE NOT NULL
           );
         
           CREATE TABLE IF NOT EXISTS posts (

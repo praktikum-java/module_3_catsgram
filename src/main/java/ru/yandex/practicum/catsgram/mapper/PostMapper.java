@@ -47,7 +47,6 @@ public final class PostMapper {
         authorDto.setId(author.getId());
         authorDto.setEmail(author.getEmail());
         authorDto.setUsername(author.getUsername());
-        authorDto.setProfilePhotoUrl(author.getProfile().getPhotoUrl());
         return authorDto;
     }
 }

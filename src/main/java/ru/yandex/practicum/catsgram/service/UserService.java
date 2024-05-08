@@ -1,7 +1,7 @@
 package ru.yandex.practicum.catsgram.service;
 
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.catsgram.dao.UserRepository;
+import ru.yandex.practicum.catsgram.dal.UserRepository;
 import ru.yandex.practicum.catsgram.dto.NewUserRequest;
 import ru.yandex.practicum.catsgram.dto.NewUserResponse;
 import ru.yandex.practicum.catsgram.dto.UpdateUserRequest;
