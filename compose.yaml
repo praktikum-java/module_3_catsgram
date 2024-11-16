@@ -8,8 +8,8 @@ services:
       - ./volumes/postgres:/var/lib/postgresql/data/
     environment:
       - POSTGRES_DB=catsgram
-      - POSTGRES_USER=dbuser
-      - POSTGRES_PASSWORD=12345
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
     healthcheck:
       test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
       timeout: 5s
@@ -28,7 +28,7 @@ services:
       - -c
       - |
         set -e
-        psql postgresql://dbuser:12345@db:5432/catsgram -v ON_ERROR_STOP=1 <<-EOSQL
+        psql postgresql://postgres:1234@db:5432/catsgram -v ON_ERROR_STOP=1 <<-EOSQL
           CREATE TABLE IF NOT EXISTS users (
             id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
             username VARCHAR(40) NOT NULL,
